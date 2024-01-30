@@ -4,6 +4,9 @@
 #include <GL/glew.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <Eigen/Dense>
+
+
 
 
 #include <iostream>
@@ -159,8 +162,8 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     // Create the image (RGB Array) to be displayed
-    const int width = 8; // keep it in powers of 2!
-    const int height = 8; // keep it in powers of 2!
+    const int width = 128; // keep it in powers of 2!
+    const int height = 128; // keep it in powers of 2!
     unsigned char image[width * height * 3];
     for (int i = 0; i < height; i++)
     {
@@ -240,4 +243,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+
 }
