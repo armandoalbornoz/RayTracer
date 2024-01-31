@@ -4,7 +4,9 @@
 #include <GL/glew.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+
 #include <Eigen/Dense>
+using Eigen::Vector3d;
 
 
 
@@ -45,6 +47,28 @@ const char* fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
+
+    
+    Vector3d v1(0, 0, 1);
+    Vector3d v2(0, -1, 0);
+
+    Vector3d v3 = v1.cross(v2);
+
+    if (v1.cross(v2) == Vector3d(0, 0, 0))
+    {
+        std::cout << "orthogonal" << std::endl;
+
+    }
+   
+    std::cout << v1.cross(v2) << std::endl;
+
+
+
+
+
+
+
+
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
