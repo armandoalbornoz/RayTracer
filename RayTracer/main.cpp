@@ -4,14 +4,18 @@
 #include <GL/glew.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-
 #include <Eigen/Dense>
+#include "RayTracer.h"
+#include "Camera.h"
+#include <iostream>
+
+
+
 using Eigen::Vector3d;
 
 
 
 
-#include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -48,7 +52,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 int main()
 {
 
-    
+  /*
     Vector3d v1(0, 0, 1);
     Vector3d v2(0, -1, 0);
 
@@ -61,13 +65,20 @@ int main()
     }
    
     std::cout << v1.cross(v2) << std::endl;
+    */
+
+    
+    Raytracer r(8,8);
+
+
+    r.rayTrace();
 
 
 
 
 
 
-
+/*
 
     // glfw: initialize and configure
     // ------------------------------
@@ -267,5 +278,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+
+
+    */
 
 }

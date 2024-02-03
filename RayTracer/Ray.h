@@ -9,26 +9,30 @@ using Eigen::Vector3d;
  */
 class Ray
 {
-	Vector3d p;
-	Vector3d d;
+	Vector3d rayOrigin; // ray Origin
+	Vector3d rayDirection; //
 
 public:
 
 
-	Ray(Vector3d a, Vector3d b)
+	Ray(Vector3d o, Vector3d d)
 	{
-		this->p = p;
-		this->d = d;
+		rayOrigin = o;
+		rayDirection = d;
 	}
 
-	Vector3d getP() { return p; }
+	Vector3d getOrigin() { return rayOrigin; }
 
-	Vector3d getD() { return d; }
+	Vector3d getDirection() { return rayDirection; }
 
+
+	/*
 	Vector3d evaluate(double t)
 	{
 		return p + (t * d);
 	}
+	*/
+
 
 	/*
 	Ray generateOrthographicRay(Vector3d viewpoint, )

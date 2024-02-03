@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include "Camera.h"
+#include <iostream>
 
 /*
 A raytracer is a rendering algorithm that works by computing one pixerl at a time, the basic task is to
@@ -16,25 +18,48 @@ that pixel is looking. A ray tracer has 3 three parts
 
 class Raytracer
 {
-	int width;
-	int height;
-	//std::vector<int> image;
+	int imageWidth;
+	int imageHeight;
+	std::vector<unsigned char> rasteredImage;
+
+public:
 
 	Raytracer(int width, int height)
 	{
-		this->width = width;
-		this->height = height;
+		imageWidth = width;
+		imageHeight = height;
 	}
 
-	std::vector<unsigned char> RayTrace()
+	std::vector<unsigned char> rayTrace()
 	{
-		for (int i = 0; i < width; i++) 
+		Vector3d cameraCenter(0, 0, 0); 
+		Vector3d upVector(0, 1, 0);
+		Vector3d viewDirection(0,0, 1);
+
+		OrthographicCamera ortographicCamera(cameraCenter, viewDirection, upVector, imageWidth, imageHeight);
+		ortographicCamera.test_show_frame();
+
+		for (int i = 0; i < imageWidth; i++)
 		{
-			for (int j = 0; j < height; j++)
+			for (int j = 0; j < imageHeight; j++)
 			{
-				// Ray generation
+
+				Vector3d rayOrigin = ortographicCamera.getOriginOfRay(i, j);
+				std::cout << "(" << rayOrigin.x() << "," << rayOrigin.y() << "," << rayOrigin.z() << ") ";
+
+
+				// Ray generation: Compute the origin and direction of each pixel's viewing ray based on the camera geometry;
+
+				// Ortographic
+
+
 			}
+
+			std::cout << std::endl;
 		}
+
+		return rasteredImage;
+
 
 	}
 
