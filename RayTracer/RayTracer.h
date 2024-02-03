@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
-#include "Camera.h"
 #include <iostream>
+#include "./OrtographicCamera.h"
+#include "Sphere.h"
 
 /*
 A raytracer is a rendering algorithm that works by computing one pixerl at a time, the basic task is to
@@ -20,45 +21,72 @@ class Raytracer
 {
 	int imageWidth;
 	int imageHeight;
-	std::vector<unsigned char> rasteredImage;
+	std::vector<unsigned char> image;
 
 public:
 
-	Raytracer(int width, int height)
+	Raytracer(int imageWidth, int imageHeight) : 
+		imageWidth(imageWidth), 
+		imageHeight(imageHeight),
+		image(3 * imageWidth * imageHeight)
 	{
-		imageWidth = width;
-		imageHeight = height;
+		std::cout << "Image Width: " << imageWidth << " image Height: " << imageHeight << " image size: " << image.size() << std::endl;
 	}
 
 	std::vector<unsigned char> rayTrace()
 	{
-		Vector3d cameraCenter(0, 0, 0); 
-		Vector3d upVector(0, 1, 0);
-		Vector3d viewDirection(0,0, 1);
 
+		std::vector<unsigned char> image(3 * imageWidth * imageHeight);
+		Vector3d cameraCenter(3, 0, 0); 
+		Vector3d upVector(1, 0, 0);
+		Vector3d viewDirection(0,0, 1);
 		OrthographicCamera ortographicCamera(cameraCenter, viewDirection, upVector, imageWidth, imageHeight);
 		ortographicCamera.test_show_frame();
+
+		Vector3d sphereCenter(0, 0, 32);
+		Sphere sphere(sphereCenter, 16);
+
+		/*
+		Ray ray = Ray(cameraCenter, viewDirection);
+
+
+		sphere.hitSphere(ray);
+
+		std::cout << sphere.hitSphere(ray)[0] << " " << sphere.hitSphere(ray)[1] <<  std::endl;
+		*/
+
 
 		for (int i = 0; i < imageWidth; i++)
 		{
 			for (int j = 0; j < imageHeight; j++)
 			{
 
-				Vector3d rayOrigin = ortographicCamera.getOriginOfRay(i, j);
-				std::cout << "(" << rayOrigin.x() << "," << rayOrigin.y() << "," << rayOrigin.z() << ") ";
-
-
 				// Ray generation: Compute the origin and direction of each pixel's viewing ray based on the camera geometry;
 
-				// Ortographic
+				Vector3d rayOrigin = ortographicCamera.getOriginOfRay(i, j);
+				//std::cout << "(" << rayOrigin.x() << "," << rayOrigin.y() << "," << rayOrigin.z() << ") ";
+
+				Ray ray(rayOrigin, viewDirection);
+
+				// Ray intersection: Find the closest object intersecting the viewing ray;
+
+				// If the ray hits the sphere shade (i,j)
+
+					if (sphere.hitSphere(ray).size() > 0)
+					{
+						int idx = (i * imageWidth + j) * 3;
+						image[idx] = (unsigned char)(255);
+						image[idx + 1] = 0;
+						image[idx + 2] = 0;
+					}
 
 
 			}
 
-			std::cout << std::endl;
+			//std::cout << std::endl;
 		}
 
-		return rasteredImage;
+		return image;
 
 
 	}

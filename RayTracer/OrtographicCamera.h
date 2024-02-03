@@ -34,19 +34,27 @@ class OrthographicCamera
 	Vector3d v; // up vector
 
 
+	double r;
+	double l;
+	double t;
+	double b;
+
 
 public:
 
 
 	// Create camera frame using the view direction vector and the up vector. Notice that this procedure does not work if both vector are colinear. 
-	OrthographicCamera(Vector3d e_, Vector3d viewDirection_,  Vector3d upV_, int imageWidth_, int imageHeight_)
+	OrthographicCamera(const Vector3d& e_, const Vector3d& viewDirection_,  const Vector3d& upV_, int imageWidth_, int imageHeight_)
 	{
 		imageWidth = imageWidth_;
 		imageHeight = imageHeight_;
 		e = e_;
 		viewDirection = viewDirection_;
 		v = upV_;
-
+		r = (imageWidth_ / 2);
+		l = -(imageWidth_ / 2);
+		t = (imageHeight_ / 2);
+		b = -(imageHeight_ / 2);
 	
 		if(viewDirection.cross(v) == Vector3d(0,0,0)) // If v and -w are collinear
 		{
@@ -73,12 +81,6 @@ public:
 	Vector3d getOriginOfRay(int i, int j)
 	{
 		// We firt need l,r,b,t (assume imageWidth and Height are powers of 2.)
-
-		
-		double r = (imageWidth / 2);
-		double l = -(imageWidth / 2);
-		double t = (imageHeight / 2);
-		double b = -(imageHeight / 2);
 
 		// calculate coordinates of pixel at position (i,j)  measured with respect to the origin e and the basis {v,u}
 

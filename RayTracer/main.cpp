@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <Eigen/Dense>
 #include "RayTracer.h"
-#include "Camera.h"
+#include "./OrtographicCamera.h"
 #include <iostream>
 
 
@@ -67,18 +67,20 @@ int main()
     std::cout << v1.cross(v2) << std::endl;
     */
 
-    
-    Raytracer r(8,8);
+    const int width = 128; // keep it in powers of 2!
+    const int height = 128; // keep it in powers of 2!
+
+    Raytracer r(width, height);
 
 
-    r.rayTrace();
+    std::vector<unsigned char> imageVec= r.rayTrace();
 
 
 
 
 
 
-/*
+
 
     // glfw: initialize and configure
     // ------------------------------
@@ -197,9 +199,12 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     // Create the image (RGB Array) to be displayed
-    const int width = 128; // keep it in powers of 2!
-    const int height = 128; // keep it in powers of 2!
-    unsigned char image[width * height * 3];
+
+    
+    unsigned char* image = &imageVec[0];
+    //unsigned char image[width * height * 3];
+
+    /*
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -210,6 +215,8 @@ int main()
             image[idx + 2] = 0;
         }
     }
+    */
+
 
     unsigned char* data = &image[0];
     if (data)
@@ -280,6 +287,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 
 
-    */
+   
 
 }

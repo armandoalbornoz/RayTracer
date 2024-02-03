@@ -141,7 +141,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="OrtographicCamera.h" />
     <ClInclude Include="dependencies\include\Eigen\src\Cholesky\LDLT.h" />
     <ClInclude Include="dependencies\include\Eigen\src\Cholesky\LLT.h" />
     <ClInclude Include="dependencies\include\Eigen\src\Cholesky\LLT_LAPACKE.h" />
@@ -457,6 +457,7 @@
     <ClInclude Include="dependencies\include\GL\wglew.h" />
     <ClInclude Include="RayTracer.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\lib\glew32s.lib" />
