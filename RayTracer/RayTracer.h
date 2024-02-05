@@ -35,7 +35,7 @@ public:
 		std::cout << "Image Width: " << imageWidth << " image Height: " << imageHeight << " image size: " << image.size() << std::endl;
 	}
 
-	std::vector<unsigned char> render(const Scene& scene, const OrthographicCamera& ortographicCamera, const PerspectiveCamera& perspectiveCamera)
+	std::vector<unsigned char> render(const Scene& scene, const OrthographicCamera& ortographicCamera, const PerspectiveCamera& perspectiveCamera, LightSource light)
 	{
 
 		std::vector<unsigned char> image(3 * imageWidth * imageHeight);
@@ -50,19 +50,21 @@ public:
 
 				//std::cout << "(" << rayOrigin.x() << "," << rayOrigin.y() << "," << rayOrigin.z() << ") ";
 
-
 				//Ray ray(rayOrigin, ortographicCamera.getDirection);
 				Ray ray(perspectiveCamera.getOrigin(), rayDirection);
 
-
 				Record rec;
 
-				if (scene.hit(ray, 0, 1000, rec))
+				if (scene.hit(ray, 0, 1000, rec, light))
 				{
+					double redPixelColorDiffuse = 0.8 * light.intensity.x() * std::max(0.0,rec.normal_to_point.dot(rec.light_direction));
+					double greenColorDiffuse = 0.8 * light.intensity.y() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+					double bluePixelColorDiffuse = 0.8 * light.intensity.z() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+
 					int idx = (i * imageWidth + j) * 3;
-					image[idx] = (unsigned char)(255* (0.5 * (rec.normal_to_point.x() + 1)));
-					image[idx + 1] = (unsigned char)(255 * (0.5 * (rec.normal_to_point.y() + 1)));
-					image[idx + 2] = (unsigned char)(255 * (0.5 * (rec.normal_to_point.z() + 1)));
+					image[idx] = (unsigned char)(255* ( (redPixelColorDiffuse)));
+					image[idx + 1] = (unsigned char)(255 * ( (greenColorDiffuse)));
+					image[idx + 2] = (unsigned char)(255 * ( (bluePixelColorDiffuse)));
 				}
 
 			}

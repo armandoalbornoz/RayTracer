@@ -4,6 +4,7 @@
 #include "Surface.h"
 #include "Ray.h"
 
+
 using Eigen::Vector3d;
 
 class Sphere : public Surface
@@ -13,12 +14,11 @@ class Sphere : public Surface
 
 public: 
 
-	int color;
 
-	Sphere(const Vector3d& center, double radius) : center(center), radius(radius) {}
+	Sphere(const Vector3d& center, double radius) : center(center), radius(radius){}
 
 	// Utilize Algebra to find the intersection of a ray and the sphere, and make sure the intersection is between the min t and max t
-	bool hit(const Ray& ray, double t_min, double t_max, Record& rec)  const override
+	bool hit(const Ray& ray, double t_min, double t_max, Record& rec, const LightSource& light)  const override
 	{
 		Vector3d e =  ray.getOrigin();
 		Vector3d d = ray.getDirection();
@@ -62,9 +62,11 @@ public:
 			}
 
 			// Store the hit information, notice that t is the smallest t.
+			// Also store normal vector in direction of light
 			rec.t = t;
 			rec.point_hit = ray.evaluate(t);
 			rec.normal_to_point = (rec.point_hit - center) / radius;
+			rec.light_direction = (light.position - rec.point_hit).normalized();
 
 			return true;
 		}

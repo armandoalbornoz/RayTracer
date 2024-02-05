@@ -18,6 +18,7 @@ public:
 	Scene(std::shared_ptr<Surface> surface) 
 	{ 
 		add(surface);
+		
 	}
 
 	void add(std::shared_ptr<Surface> surface)
@@ -29,14 +30,14 @@ public:
 	This function checks the intersections of the ray and all the surfaces and saves the smallest intersection point
 	in our record.
 	*/
-	bool hit(const Ray& ray, double t_min, double t_max, Record& rec)  const override
+	bool hit(const Ray& ray, double t_min, double t_max,  Record& rec, const LightSource& light)  const override
 	{
 		Record current_surface_record;
 		bool hit = false;
 		auto t = t_max;
 
 		for (const auto& surface : surfaces) {
-			if (surface->hit(ray, t_min, t, current_surface_record)) {
+			if (surface->hit(ray, t_min, t, current_surface_record, light)) {
 
 				hit = true;
 				t = current_surface_record.t;

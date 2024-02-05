@@ -17,7 +17,7 @@ public:
 
 	Plane(const Vector3d& p, const Vector3d& n) : p(p), n(n) {}
 
-	bool hit(const Ray& ray, double t_min, double t_max, Record& rec)  const override
+	bool hit(const Ray& ray, double t_min, double t_max,  Record& rec, const LightSource& light)  const override
 	{
 		double denominator = ray.getDirection().dot(n);
 
@@ -37,7 +37,7 @@ public:
 		rec.t = t;
 		rec.normal_to_point = n;
 		rec.point_hit = ray.evaluate(t);
-
+		rec.light_direction = (light.position - rec.point_hit).normalized();
 		return true;
 
 	}

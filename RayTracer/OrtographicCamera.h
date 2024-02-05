@@ -13,8 +13,6 @@ up vector, which is used to construct a basis that has v and w in the plane defi
 
 */
 
-
-
 /*
 For an Ortographic camera, all the rays will have direction viewDirectionV. Even though a parallel view does not have a viewpoint per se,
 we can still use the origin of the camera frame to define the plane where the rays start, so it is possible for objects to be behind the camera.

@@ -8,6 +8,7 @@
 #include "RayTracer.h"
 #include "./OrtographicCamera.h"
 #include <iostream>
+#include "./LightSource.h"
 
 
 
@@ -66,29 +67,24 @@ int main()
     const int width = 256; // keep it in powers of 2!
     const int height = 256; // keep it in powers of 2!
 
-
     // Scene
 
-    Scene scene(std::make_shared<Sphere>(Vector3d(0, 0, 500), 20));
-    scene.add(std::make_shared<Sphere>(Vector3d(70, 0, 800), 20));
+    Scene scene(std::make_shared<Sphere>(Vector3d(0, 3, 500), 20));
+    scene.add(std::make_shared<Sphere>(Vector3d(35, 0, 600), 10));
+   // Material sphere1Material(0.5);
     scene.add(std::make_shared<Plane>(Vector3d(0, -20, 0), Vector3d(0, 1, 0)));
+    //Material sphere1Material(0.2);
 
     // Cameras
-
     OrthographicCamera ortographicCamera(Vector3d(0, 0, 0), Vector3d(0, 0, 1), Vector3d(1, 0, 0), width, height);
-    PerspectiveCamera perspectiveCamera(Vector3d(0, 30, 0), Vector3d(0, -0.1, 1), Vector3d(1, 0, 0), width, height, 1000);     // -0.1 bends the plane down a little 
-
+    PerspectiveCamera perspectiveCamera(Vector3d(0, 30, 0), Vector3d(0, -0.1, 1), Vector3d(1, 0, 0), width, height, 1000);   
+    LightSource light(Vector3d(0.5,0.6,0.7), Vector3d(-126, 70, 500));
 
     // RayTracer
 
     Raytracer r(width, height);
 
-
-    std::vector<unsigned char> imageVec= r.render(scene, ortographicCamera, perspectiveCamera);
-
-
-
-
+    std::vector<unsigned char> imageVec= r.render(scene, ortographicCamera, perspectiveCamera, light);
 
     // glfw: initialize and configure
     // ------------------------------
