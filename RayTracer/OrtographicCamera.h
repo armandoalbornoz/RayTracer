@@ -66,11 +66,11 @@ public:
 
 			viewDirection = viewDirection / viewDirection.norm();
 
-			u = v.cross(viewDirection);
+			u = viewDirection.cross(v);
 
 			u = u / u.norm();
 
-			v = viewDirection.cross(u);
+			v = u.cross(viewDirection);
 
 			v = v / v.norm();
 		}
@@ -80,12 +80,10 @@ public:
 	// origin e and the basis {v,u}
 	Vector3d getOriginOfRay(int i, int j)
 	{
-		// We firt need l,r,b,t (assume imageWidth and Height are powers of 2.)
-
 		// calculate coordinates of pixel at position (i,j)  measured with respect to the origin e and the basis {v,u}
 
 		double ucoord = l + ((r - l) * (i + 0.5) / imageWidth);
-		double vcoord = b + ((t - b) * (j + 0.5) / imageHeight);
+		double vcoord =  b + ((t - b) * (j + 0.5) / imageHeight);
 
 		/*
 		In an orthographic view, we can simply use the pixel’s image-plane position
@@ -95,6 +93,9 @@ public:
 		return (e + (ucoord * u) + (vcoord * v));
 	}
 
+	Vector3d getDirection() const { return viewDirection;}
+
+
 	void test_show_frame()
 	{
 		std::cout << "viewdirection:  ("  << viewDirection.x() << "," << viewDirection.y() << "," << viewDirection.z() << ")" << std::endl;
@@ -102,11 +103,4 @@ public:
 		std::cout << "up: ("  << v.x() << "," << v.y() << "," << v.z() << ")" << std::endl;
 
 	}
-
-
-
-
-
-
-
 };

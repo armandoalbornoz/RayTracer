@@ -25,5 +25,7 @@ public:
 
 	 Vector3d getDirection() const { return rayDirection; }
 
+	 Vector3d evaluate(double t) const { return rayOrigin + t * rayDirection;  }
+
 
 };

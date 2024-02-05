@@ -1,29 +1,25 @@
 #pragma once
 #include <vector>
 #include <Eigen/Dense>
+#include "Surface.h"
 #include "Ray.h"
 
 using Eigen::Vector3d;
 
-class Sphere
+class Sphere : public Surface
 {
 	Vector3d center;
 	double radius;
 
 public: 
 
-	Sphere(Vector3d center, double radius)
-	{
-		this->center = center;
-		this->radius = radius;
-	}
+	int color;
 
-	// Utilize Algebra to find the intersection of a ray and the sphere, we return a vector with the t values that give the intersection points
-	// these the first value will always be the smaller t.
-	std::vector<double> hitSphere(const Ray& ray)
-	{
-		std::vector<double> tOfIntersection;
+	Sphere(const Vector3d& center, double radius) : center(center), radius(radius) {}
 
+	// Utilize Algebra to find the intersection of a ray and the sphere, and make sure the intersection is between the min t and max t
+	bool hit(const Ray& ray, double t_min, double t_max, Record& rec)  const override
+	{
 		Vector3d e =  ray.getOrigin();
 		Vector3d d = ray.getDirection();
 
@@ -31,30 +27,46 @@ public:
 		double B = 2 * (d.dot((e - center)));
 		double C = (e - center).dot((e- center)) - (radius * radius);
 
-		double determinant = (B * B) - (4 * A * C);
+		double discriminant = (B * B) - (4 * A * C);
 
-		if (determinant < 0)
+		if (discriminant < 0)
 		{
-			return tOfIntersection;
+			return false;
 		}
-		else if (determinant == 0)
+		else if (discriminant == 0)
 		{
 			double t = -B / (2 * A);
-			tOfIntersection.emplace_back(t);
-			return tOfIntersection;
+
+			if (t <= t_min || t_max <= t)
+			{
+				return false;
+			}
+
+			return true;
+
 		}
 		else
 		{
+			double sqrtDis = sqrt(discriminant);
+			double t = (-B - sqrtDis) / (2 * A);
 
-			double t_1 = (-B + sqrt(determinant)) / (2 * A);
-			double t_2 = (-B - sqrt(determinant)) / (2 * A);
+			if (t <= t_min || t_max <= t) {
+				
+				t = (-B + sqrtDis) / (2 * A);
 
-			tOfIntersection.emplace_back(t_1);
-			tOfIntersection.emplace_back(t_2);
+				if (t <= t_min || t_max <= t)
+				{
+					return false;
 
-			std::sort(tOfIntersection.begin(), tOfIntersection.end());
+				}
+			}
 
-			return tOfIntersection;
+			// Store the hit information, notice that t is the smallest t.
+			rec.t = t;
+			rec.point_hit = ray.evaluate(t);
+			rec.normal_to_point = (rec.point_hit - center) / radius;
+
+			return true;
 		}
 
 	}

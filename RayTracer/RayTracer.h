@@ -2,7 +2,12 @@
 #include <vector>
 #include <iostream>
 #include "./OrtographicCamera.h"
+#include "./Surface.h"
+#include "./PerspectiveCamera.h"
+#include "Plane.h"
 #include "Sphere.h"
+#include <memory>
+#include "./Scene.h"
 
 /*
 A raytracer is a rendering algorithm that works by computing one pixerl at a time, the basic task is to
@@ -25,74 +30,45 @@ class Raytracer
 
 public:
 
-	Raytracer(int imageWidth, int imageHeight) : 
-		imageWidth(imageWidth), 
-		imageHeight(imageHeight),
-		image(3 * imageWidth * imageHeight)
+	Raytracer(int imageWidth, int imageHeight) : imageWidth(imageWidth), imageHeight(imageHeight), image(3 * imageWidth * imageHeight)
 	{
 		std::cout << "Image Width: " << imageWidth << " image Height: " << imageHeight << " image size: " << image.size() << std::endl;
 	}
 
-	std::vector<unsigned char> rayTrace()
+	std::vector<unsigned char> render(const Scene& scene, const OrthographicCamera& ortographicCamera, const PerspectiveCamera& perspectiveCamera)
 	{
 
 		std::vector<unsigned char> image(3 * imageWidth * imageHeight);
-		Vector3d cameraCenter(3, 0, 0); 
-		Vector3d upVector(1, 0, 0);
-		Vector3d viewDirection(0,0, 1);
-		OrthographicCamera ortographicCamera(cameraCenter, viewDirection, upVector, imageWidth, imageHeight);
-		ortographicCamera.test_show_frame();
 
-		Vector3d sphereCenter(0, 0, 32);
-		Sphere sphere(sphereCenter, 16);
-
-		/*
-		Ray ray = Ray(cameraCenter, viewDirection);
-
-
-		sphere.hitSphere(ray);
-
-		std::cout << sphere.hitSphere(ray)[0] << " " << sphere.hitSphere(ray)[1] <<  std::endl;
-		*/
-
-
-		for (int i = 0; i < imageWidth; i++)
+		for (int i = 0; i < imageHeight; i++)
 		{
-			for (int j = 0; j < imageHeight; j++)
+			for (int j = 0; j < imageWidth; j++)
 			{
 
-				// Ray generation: Compute the origin and direction of each pixel's viewing ray based on the camera geometry;
+				//Vector3d rayOrigin = ortographicCamera.getOriginOfRay(i, j);
+				Vector3d rayDirection = perspectiveCamera.getDirectionOfRay(i, j);
 
-				Vector3d rayOrigin = ortographicCamera.getOriginOfRay(i, j);
 				//std::cout << "(" << rayOrigin.x() << "," << rayOrigin.y() << "," << rayOrigin.z() << ") ";
 
-				Ray ray(rayOrigin, viewDirection);
 
-				// Ray intersection: Find the closest object intersecting the viewing ray;
+				//Ray ray(rayOrigin, ortographicCamera.getDirection);
+				Ray ray(perspectiveCamera.getOrigin(), rayDirection);
 
-				// If the ray hits the sphere shade (i,j)
 
-					if (sphere.hitSphere(ray).size() > 0)
-					{
-						int idx = (i * imageWidth + j) * 3;
-						image[idx] = (unsigned char)(255);
-						image[idx + 1] = 0;
-						image[idx + 2] = 0;
-					}
+				Record rec;
 
+				if (scene.hit(ray, 0, 1000, rec))
+				{
+					int idx = (i * imageWidth + j) * 3;
+					image[idx] = (unsigned char)(255* (0.5 * (rec.normal_to_point.x() + 1)));
+					image[idx + 1] = (unsigned char)(255 * (0.5 * (rec.normal_to_point.y() + 1)));
+					image[idx + 2] = (unsigned char)(255 * (0.5 * (rec.normal_to_point.z() + 1)));
+				}
 
 			}
 
 			//std::cout << std::endl;
 		}
-
 		return image;
-
-
 	}
-
-
-
-
-
 };

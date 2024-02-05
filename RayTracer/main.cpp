@@ -13,10 +13,6 @@
 
 using Eigen::Vector3d;
 
-
-
-
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
@@ -67,16 +63,28 @@ int main()
     std::cout << v1.cross(v2) << std::endl;
     */
 
-    const int width = 128; // keep it in powers of 2!
-    const int height = 128; // keep it in powers of 2!
+    const int width = 256; // keep it in powers of 2!
+    const int height = 256; // keep it in powers of 2!
+
+
+    // Scene
+
+    Scene scene(std::make_shared<Sphere>(Vector3d(0, 0, 500), 20));
+    scene.add(std::make_shared<Sphere>(Vector3d(70, 0, 800), 20));
+    scene.add(std::make_shared<Plane>(Vector3d(0, -20, 0), Vector3d(0, 1, 0)));
+
+    // Cameras
+
+    OrthographicCamera ortographicCamera(Vector3d(0, 0, 0), Vector3d(0, 0, 1), Vector3d(1, 0, 0), width, height);
+    PerspectiveCamera perspectiveCamera(Vector3d(0, 30, 0), Vector3d(0, -0.1, 1), Vector3d(1, 0, 0), width, height, 1000);     // -0.1 bends the plane down a little 
+
+
+    // RayTracer
 
     Raytracer r(width, height);
 
 
-    std::vector<unsigned char> imageVec= r.rayTrace();
-
-
-
+    std::vector<unsigned char> imageVec= r.render(scene, ortographicCamera, perspectiveCamera);
 
 
 

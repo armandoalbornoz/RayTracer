@@ -455,9 +455,13 @@
     <ClInclude Include="dependencies\include\GL\glew.h" />
     <ClInclude Include="dependencies\include\GL\glxew.h" />
     <ClInclude Include="dependencies\include\GL\wglew.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="RayTracer.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Surface.h" />
+    <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\lib\glew32s.lib" />
