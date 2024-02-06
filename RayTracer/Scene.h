@@ -9,16 +9,15 @@
 	intersection with the smallest t value.
 */
 
-class Scene : Surface
+class Scene 
 {
 public:
 
 	std::vector<std::shared_ptr<Surface>> surfaces;
 
-	Scene(std::shared_ptr<Surface> surface) 
+	Scene(std::shared_ptr<Surface> surface)
 	{ 
 		add(surface);
-		
 	}
 
 	void add(std::shared_ptr<Surface> surface)
@@ -30,15 +29,16 @@ public:
 	This function checks the intersections of the ray and all the surfaces and saves the smallest intersection point
 	in our record.
 	*/
-	bool hit(const Ray& ray, double t_min, double t_max,  Record& rec, const LightSource& light)  const override
+	bool hit(const Ray& ray, double t_min, double t_max,  Record& rec, const LightSource& light) const
 	{
 		Record current_surface_record;
 		bool hit = false;
 		auto t = t_max;
 
-		for (const auto& surface : surfaces) {
+		for (auto surface : surfaces) {
 			if (surface->hit(ray, t_min, t, current_surface_record, light)) {
-
+				// Do shading here
+				//surface.shade();
 				hit = true;
 				t = current_surface_record.t;
 				rec = current_surface_record;
@@ -47,5 +47,4 @@ public:
 
 		return hit;
 	}
-	
 };

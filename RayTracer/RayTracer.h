@@ -53,18 +53,39 @@ public:
 				//Ray ray(rayOrigin, ortographicCamera.getDirection);
 				Ray ray(perspectiveCamera.getOrigin(), rayDirection);
 
+				// This record contains the hit info of the closest surface that was hit in the scene at pixel i,j,
 				Record rec;
 
 				if (scene.hit(ray, 0, 1000, rec, light))
 				{
-					double redPixelColorDiffuse = 0.8 * light.intensity.x() * std::max(0.0,rec.normal_to_point.dot(rec.light_direction));
-					double greenColorDiffuse = 0.8 * light.intensity.y() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
-					double bluePixelColorDiffuse = 0.8 * light.intensity.z() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+					double diffuseFactor = std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+					double specularFactor = std::pow(std::max(0.0, rec.normal_to_point.dot(rec.angleBisector)), 500);
+
+					double redPixelColorDiffuse =
+						rec.diffuseCoefficient.x() * light.intensity.x() * diffuseFactor +
+						rec.specularCoefficient.x() * light.intensity.x() * specularFactor +
+						rec.ambientCoefficient.x() * light.ambientLightIntensity.x();
+						
+					double greenColorDiffuse = 
+						rec.diffuseCoefficient.y() * light.intensity.y() * diffuseFactor +
+						rec.specularCoefficient.y() * light.intensity.y() * specularFactor +
+						rec.ambientCoefficient.y() * light.ambientLightIntensity.y();
+
+					double bluePixelColorDiffuse = 
+						rec.diffuseCoefficient.z() * light.intensity.z() * diffuseFactor +
+						rec.specularCoefficient.z() * light.intensity.z() * specularFactor +
+						rec.ambientCoefficient.z() * light.ambientLightIntensity.z();
+
+
+					//double  radius
+					// If we hit we shade
+
+					//scene.diffuseShade(ray, light);
 
 					int idx = (i * imageWidth + j) * 3;
-					image[idx] = (unsigned char)(255* ( (redPixelColorDiffuse)));
-					image[idx + 1] = (unsigned char)(255 * ( (greenColorDiffuse)));
-					image[idx + 2] = (unsigned char)(255 * ( (bluePixelColorDiffuse)));
+					image[idx] = (unsigned char)(255 * redPixelColorDiffuse);
+					image[idx + 1] = (unsigned char)(255 * greenColorDiffuse);
+					image[idx + 2] = (unsigned char)(255 * bluePixelColorDiffuse);
 				}
 
 			}

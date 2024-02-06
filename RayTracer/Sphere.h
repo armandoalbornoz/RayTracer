@@ -13,9 +13,8 @@ class Sphere : public Surface
 	double radius;
 
 public: 
-
-
-	Sphere(const Vector3d& center, double radius) : center(center), radius(radius){}
+	Sphere(const Vector3d& center, double radius, Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient) :
+		center(center), radius(radius), Surface(diffuseCoefficient, specularCoefficient, ambientCoefficient) {}
 
 	// Utilize Algebra to find the intersection of a ray and the sphere, and make sure the intersection is between the min t and max t
 	bool hit(const Ray& ray, double t_min, double t_max, Record& rec, const LightSource& light)  const override
@@ -67,12 +66,23 @@ public:
 			rec.point_hit = ray.evaluate(t);
 			rec.normal_to_point = (rec.point_hit - center) / radius;
 			rec.light_direction = (light.position - rec.point_hit).normalized();
-
-			return true;
+			rec.diffuseCoefficient = diffuseCoefficient;
+			rec.specularCoefficient = specularCoefficient;
+			rec.ambientCoefficient = ambientCoefficient;
+			rec.angleBisector = (((ray.getOrigin() - rec.point_hit).normalized()) + rec.light_direction).normalized();
 		}
 
 	}
 
+	/*
+	 Vector3d diffuseShade(const LightSource& light, Record rec) const override
+	{
+		double redPixelColorDiffuse = diffuseCoefficient * light.intensity.x() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+		double greenColorDiffuse = diffuseCoefficient * light.intensity.y() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+		double bluePixelColorDiffuse = diffuseCoefficient * light.intensity.z() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+		return Vector3d(redPixelColorDiffuse, greenColorDiffuse, bluePixelColorDiffuse);
+	}
+	*/
 
 	void test_Sphere()
 	{

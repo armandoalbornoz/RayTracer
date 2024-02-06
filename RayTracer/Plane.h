@@ -15,7 +15,8 @@ class Plane : public Surface
 public:
 
 
-	Plane(const Vector3d& p, const Vector3d& n) : p(p), n(n) {}
+	Plane(const Vector3d& p, const Vector3d& n, Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient) :
+		p(p), n(n), Surface(diffuseCoefficient, specularCoefficient, ambientCoefficient) {}  
 
 	bool hit(const Ray& ray, double t_min, double t_max,  Record& rec, const LightSource& light)  const override
 	{
@@ -35,12 +36,29 @@ public:
 		}
 
 		rec.t = t;
-		rec.normal_to_point = n;
 		rec.point_hit = ray.evaluate(t);
+		rec.normal_to_point = n;
 		rec.light_direction = (light.position - rec.point_hit).normalized();
+		rec.diffuseCoefficient = diffuseCoefficient;
+		rec.specularCoefficient = specularCoefficient;
+		rec.ambientCoefficient = ambientCoefficient;
+
+
 		return true;
 
 	}
+
+	/*
+	Vector3d diffuseShade(const LightSource& light, Record rec) const override
+	{
+		double redPixelColorDiffuse = +diffuseCoefficient * (light.intensity.x())* std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+		double greenColorDiffuse = diffuseCoefficient * light.intensity.y() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+		double bluePixelColorDiffuse = diffuseCoefficient * light.intensity.z() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
+
+		return Vector3d(redPixelColorDiffuse, greenColorDiffuse, bluePixelColorDiffuse);
+	}
+	*/
+
 
 	void test_Plane()
 	{
