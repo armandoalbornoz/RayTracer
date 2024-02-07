@@ -68,17 +68,17 @@ int main()
     const int height = 256; // keep it in powers of 2!
 
     // Scene
-
-    Scene scene(std::make_shared<Sphere>(Vector3d(-20, 28, 70), 20, Vector3d(0.3,0.2, 0.6), Vector3d(1,1,1), Vector3d(0.35,0.35,0.8)));
-    scene.add(std::make_shared<Sphere>(Vector3d(35, 28, 80), 20, Vector3d(0.3, 0.8,0.6), Vector3d(0,0,0), Vector3d(0.7, 0.7, 0.7)));
+    
+    Scene scene(std::make_shared<Sphere>(Vector3d(-20, 0, 50), 20, Vector3d(0.3,0.2, 0.4), Vector3d(1,1,1), Vector3d(0.35,0.35,0.3), Vector3d(0,0,0)));
+    scene.add(std::make_shared<Sphere>(Vector3d(35, 0, 70), 20, Vector3d(0.3, 0.8,0.6), Vector3d(0,0,0), Vector3d(0.7, 0.7, 0.7), Vector3d(0, 0, 0)));
    // Material sphere1Material(0.5);
-    scene.add(std::make_shared<Plane>(Vector3d(0, -20, 0), Vector3d(0, 1, 0), Vector3d(0.7,0.6,0.7), Vector3d(0.8, 0.3, 0.64), Vector3d(0.4, 0.7, 0.9)));
+    scene.add(std::make_shared<Plane>(Vector3d(0, -20, 0), Vector3d(0, 1, 0), Vector3d(0.35 ,0.1 ,0.17), Vector3d(1, 1, 1), Vector3d(0.4 * 3, 0.7 *3, 0.9 * 3), Vector3d(0.4, 0.4, 0.4)));
     //Material sphere1Material(0.2);
 
     // Cameras
     OrthographicCamera ortographicCamera(Vector3d(0, 0, 0), Vector3d(0, 0, 1), Vector3d(1, 0, 0), width, height);
     PerspectiveCamera perspectiveCamera(Vector3d(0, 30, 0), Vector3d(0, 0, 1), Vector3d(1, 0, 0), width, height, 100);   
-    LightSource light(Vector3d(0.9,0.9,0.9), Vector3d(-15, 50, 50), Vector3d(0.2,0.2,0.2));
+    LightSource light(Vector3d(0.9,0.9,0.9), Vector3d(-150, 300, 50), Vector3d(0.2,0.2,0.2));
 
     // RayTracer
 

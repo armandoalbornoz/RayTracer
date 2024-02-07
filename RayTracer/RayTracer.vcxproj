@@ -143,7 +143,6 @@
   <ItemGroup>
     <ClInclude Include="Color.h" />
     <ClInclude Include="LightSource.h" />
-    <ClInclude Include="Material.h" />
     <ClInclude Include="OrtographicCamera.h" />
     <ClInclude Include="dependencies\include\Eigen\src\Cholesky\LDLT.h" />
     <ClInclude Include="dependencies\include\Eigen\src\Cholesky\LLT.h" />

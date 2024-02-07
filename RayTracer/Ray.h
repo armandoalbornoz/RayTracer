@@ -22,8 +22,10 @@ public:
 	}
 
 	 Vector3d getOrigin() const  { return rayOrigin; }
-
 	 Vector3d getDirection() const { return rayDirection; }
+
+	 void setOrigin(Vector3d origin) { rayOrigin = origin; }
+	 void setDirection(Vector3d direction) { rayDirection = direction; }
 
 	 Vector3d evaluate(double t) const { return rayOrigin + t * rayDirection;  }
 

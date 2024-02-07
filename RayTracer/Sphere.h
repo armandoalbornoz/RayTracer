@@ -13,8 +13,8 @@ class Sphere : public Surface
 	double radius;
 
 public: 
-	Sphere(const Vector3d& center, double radius, Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient) :
-		center(center), radius(radius), Surface(diffuseCoefficient, specularCoefficient, ambientCoefficient) {}
+	Sphere(const Vector3d& center, double radius, Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient, Vector3d mirrorCoefficient) :
+		center(center), radius(radius), Surface(diffuseCoefficient, specularCoefficient, ambientCoefficient, mirrorCoefficient) {}
 
 	// Utilize Algebra to find the intersection of a ray and the sphere, and make sure the intersection is between the min t and max t
 	bool hit(const Ray& ray, double t_min, double t_max, Record& rec, const LightSource& light)  const override
@@ -42,7 +42,6 @@ public:
 			}
 
 			return true;
-
 		}
 		else
 		{
@@ -69,6 +68,7 @@ public:
 			rec.diffuseCoefficient = diffuseCoefficient;
 			rec.specularCoefficient = specularCoefficient;
 			rec.ambientCoefficient = ambientCoefficient;
+			rec.mirrorCoefficient = mirrorCoefficient;
 			rec.angleBisector = (((ray.getOrigin() - rec.point_hit).normalized()) + rec.light_direction).normalized();
 		}
 

@@ -15,8 +15,8 @@ class Plane : public Surface
 public:
 
 
-	Plane(const Vector3d& p, const Vector3d& n, Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient) :
-		p(p), n(n), Surface(diffuseCoefficient, specularCoefficient, ambientCoefficient) {}  
+	Plane(const Vector3d& p, const Vector3d& n, Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient,Vector3d mirrorCoefficient) :
+		p(p), n(n), Surface(diffuseCoefficient, specularCoefficient, ambientCoefficient, mirrorCoefficient) {}
 
 	bool hit(const Ray& ray, double t_min, double t_max,  Record& rec, const LightSource& light)  const override
 	{
@@ -24,7 +24,7 @@ public:
 
 		if (denominator == 0) 
 		{ 
-			std::cout << "Ray is parallel to plane." << std::endl;
+			//std::cout << "Ray is parallel to plane." << std::endl;
 			return false;
 		}
 
@@ -42,7 +42,7 @@ public:
 		rec.diffuseCoefficient = diffuseCoefficient;
 		rec.specularCoefficient = specularCoefficient;
 		rec.ambientCoefficient = ambientCoefficient;
-
+		rec.mirrorCoefficient = mirrorCoefficient;
 
 		return true;
 

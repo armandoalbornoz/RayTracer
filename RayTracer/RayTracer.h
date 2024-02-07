@@ -35,7 +35,7 @@ public:
 		std::cout << "Image Width: " << imageWidth << " image Height: " << imageHeight << " image size: " << image.size() << std::endl;
 	}
 
-	std::vector<unsigned char> render(const Scene& scene, const OrthographicCamera& ortographicCamera, const PerspectiveCamera& perspectiveCamera, LightSource light)
+	std::vector<unsigned char> render(Scene& scene, const OrthographicCamera& ortographicCamera, const PerspectiveCamera& perspectiveCamera, LightSource light)
 	{
 
 		std::vector<unsigned char> image(3 * imageWidth * imageHeight);
@@ -60,6 +60,17 @@ public:
 				{
 					double diffuseFactor = std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
 					double specularFactor = std::pow(std::max(0.0, rec.normal_to_point.dot(rec.angleBisector)), 500);
+
+
+					if (rec.shadowed)
+					{
+						double diffuseFactor = 0;
+						double specularFactor = 0;
+						rec.ambientCoefficient.x() = rec.ambientCoefficient.x() * 0.9;
+						rec.ambientCoefficient.y() = rec.ambientCoefficient.y() * 0.9;
+						rec.ambientCoefficient.z() = rec.ambientCoefficient.z() * 0.9;
+					}
+			
 
 					double redPixelColorDiffuse =
 						rec.diffuseCoefficient.x() * light.intensity.x() * diffuseFactor +

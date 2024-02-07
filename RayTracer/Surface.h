@@ -1,6 +1,5 @@
 #pragma once
 #include "ray.h"
-#include "./Material.h"
 #include "./LightSource.h"
 /* Surface is an abstract class for Objects that can be hit by rays, and surface_hit_record is a class to store information about
    the hit
@@ -16,6 +15,8 @@ struct Record {
      Vector3d specularCoefficient;
      Vector3d ambientCoefficient;
      Vector3d angleBisector;
+     bool shadowed = false;
+     Vector3d mirrorCoefficient;
 };
 
 
@@ -25,9 +26,10 @@ protected:
     Vector3d diffuseCoefficient;
     Vector3d specularCoefficient;
     Vector3d ambientCoefficient;
+    Vector3d mirrorCoefficient;
 
-    Surface(Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient) :
-        diffuseCoefficient(diffuseCoefficient), specularCoefficient(specularCoefficient), ambientCoefficient(ambientCoefficient)  {}
+    Surface(Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient, Vector3d mirrorCoefficient) :
+        diffuseCoefficient(diffuseCoefficient), specularCoefficient(specularCoefficient), ambientCoefficient(ambientCoefficient), mirrorCoefficient(mirrorCoefficient)  {}
 public:
 
     virtual ~Surface() = default;
