@@ -51,7 +51,6 @@ public:
 					Vector3d rayDirection = perspectiveCamera.getDirectionOfRay(i, j);
 					ray.setOrigin(perspectiveCamera.getOrigin());
 					ray.setDirection(rayDirection);
-
 				}
 				else
 				{
@@ -80,7 +79,6 @@ public:
 						rec.ambientCoefficient.y() = rec.ambientCoefficient.y() * 0.95;
 						rec.ambientCoefficient.z() = rec.ambientCoefficient.z() * 0.95;
 					}
-			
 
 					double redPixelColorDiffuse =
 						rec.diffuseCoefficient.x() * light.intensity.x() * diffuseFactor +

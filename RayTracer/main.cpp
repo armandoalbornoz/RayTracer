@@ -11,6 +11,7 @@
 #include "./LightSource.h"
 #include <string>
 #include <fstream>
+#include "./Triangle.h"
 
 
 using namespace std;
@@ -131,16 +132,22 @@ int main()
 
 
     // Scene
+
+
     
-    Scene scene(std::make_shared<Sphere>(Vector3d(-20, 0, 0), 20, Vector3d(0.3,0.2, 0.4), Vector3d(1,1,1), Vector3d(0.3, 0.2, 0.4), Vector3d(0,0,0)));
+    Scene scene(std::make_shared<Sphere>(Vector3d(-40, 0, 0), 20, Vector3d(0.3,0.2, 0.4), Vector3d(1,1,1), Vector3d(0.3, 0.2, 0.4), Vector3d(0,0,0)));
     scene.add(std::make_shared<Sphere>(Vector3d(35, 0, 20), 20, Vector3d(0.3, 0.8,0.6), Vector3d(0,0,0), Vector3d(0.3, 0.8, 0.6), Vector3d(0, 0, 0)));
-   // Material sphere1Material(0.5);
-    scene.add(std::make_shared<Plane>(Vector3d(0, -20, 0), Vector3d(0, 1, 0), Vector3d(0.35 ,0.1 ,0.17), Vector3d(1, 1, 1), Vector3d(0.4, 0.7 , 0.9 ), Vector3d(0.4, 0.4, 0.4)));
-    //Material sphere1Material(0.2);
+    scene.add(std::make_shared<Triangle>(Vector3d(-20, -20, 0), Vector3d(0 , -20, -20), Vector3d(0,20,-10), Vector3d(0, 0.4, 0.4), Vector3d(0, 0, 0), Vector3d(0, 0.4, 0.4), Vector3d(0,0,0)));
+    scene.add(std::make_shared<Triangle>(Vector3d(20, -20, 0), Vector3d(0, -20, -20), Vector3d(0, 20, -10), Vector3d(0, 0.4, 0.4), Vector3d(0, 0, 0), Vector3d(0, 0.4, 0.4), Vector3d(0, 0, 0)));
+    scene.add(std::make_shared<Triangle>(Vector3d(-20, -20, 0), Vector3d(20, -20, 0), Vector3d(0, 20, -10), Vector3d(0, 0.4, 0.4), Vector3d(0, 0, 0), Vector3d(0, 0.4, 0.4), Vector3d(0, 0, 0)));
+    scene.add(std::make_shared<Triangle>(Vector3d(-20, -20, 0), Vector3d(20, -20, 0), Vector3d(0, -20, -20), Vector3d(0, 0.4, 0.4), Vector3d(0, 0, 0), Vector3d(0, 0.4, 0.4), Vector3d(0, 0, 0)));
+
+
+    scene.add(std::make_shared<Plane>(Vector3d(0, -20, 0), Vector3d(0, 1, 0), Vector3d(0.35, 0.1, 0.17), Vector3d(1, 1, 1), Vector3d(0.4, 0.7, 0.9), Vector3d(0.4, 0.4, 0.4)));
 
     // Cameras
-    OrthographicCamera ortographicCamera(Vector3d(100, 0, 0), Vector3d(-100, 0, 1), Vector3d(200, 0, 0), width, height);
-    PerspectiveCamera perspectiveCamera(Vector3d(100, 0, 0), Vector3d(-100, 0, 1), Vector3d(200, 0, 0), width, height, 100);
+    OrthographicCamera ortographicCamera(Vector3d(20, 50, -125), Vector3d(-20, -50, 125), Vector3d(200, 0, 0), width, height);
+    PerspectiveCamera perspectiveCamera(Vector3d(20, 50, -125), Vector3d(-20, -50, 125), Vector3d(200, 0, 0), width, height, 100);
     LightSource light(Vector3d(1,1,1), Vector3d(-150, 300, 50), Vector3d(1.2,1.2,1.2));
 
     // RayTracer
@@ -167,8 +174,8 @@ int main()
         perspectiveCamera.setViewDirection(viewVector);
 
         // render and save image
-        imageVec = r.render(scene, ortographicCamera, perspectiveCamera, light);
-        writeImage("C:/Users/PC/Desktop/images/" + std::to_string(frame) + ".ppm", width, height, imageVec);
+        imageVecProj = r.render(scene, ortographicCamera, perspectiveCamera, light, true);
+        writeImage("C:/Users/PC/Desktop/images/" + std::to_string(frame) + ".ppm", width, height, imageVecProj);
         
         // change camera position by finding the new center of the camera and the view vector
  
@@ -179,6 +186,8 @@ int main()
     }
 
     */
+
+   
     
     
 

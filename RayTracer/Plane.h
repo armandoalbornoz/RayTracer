@@ -9,10 +9,13 @@
 
 class Plane : public Surface
 {
+
+public:
 	Vector3d p; // A point on the plane
 	Vector3d n; // A normal to the plane
 
-public:
+
+	Plane(): Surface(diffuseCoefficient, specularCoefficient, ambientCoefficient, mirrorCoefficient) {};
 
 
 	Plane(const Vector3d& p, const Vector3d& n, Vector3d diffuseCoefficient, Vector3d specularCoefficient, Vector3d ambientCoefficient,Vector3d mirrorCoefficient) :
@@ -43,21 +46,12 @@ public:
 		rec.specularCoefficient = specularCoefficient;
 		rec.ambientCoefficient = ambientCoefficient;
 		rec.mirrorCoefficient = mirrorCoefficient;
+		rec.angleBisector = (((ray.getOrigin() - rec.point_hit).normalized()) + rec.light_direction).normalized();
+
 
 		return true;
 
 	}
-
-	/*
-	Vector3d diffuseShade(const LightSource& light, Record rec) const override
-	{
-		double redPixelColorDiffuse = +diffuseCoefficient * (light.intensity.x())* std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
-		double greenColorDiffuse = diffuseCoefficient * light.intensity.y() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
-		double bluePixelColorDiffuse = diffuseCoefficient * light.intensity.z() * std::max(0.0, rec.normal_to_point.dot(rec.light_direction));
-
-		return Vector3d(redPixelColorDiffuse, greenColorDiffuse, bluePixelColorDiffuse);
-	}
-	*/
 
 
 	void test_Plane()

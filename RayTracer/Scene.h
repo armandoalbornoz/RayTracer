@@ -29,7 +29,7 @@ public:
 	
 	void idealSpecular(Ray& ray, double t_min, Record& rec, Record& current_surface_record, LightSource& light, int& counter, bool hit)
 	{
-		/*
+		
 		if (counter > 1)
 		{
 			return;
@@ -51,8 +51,8 @@ public:
 						rec.ambientCoefficient = current_surface_record.ambientCoefficient;
 					}
 				}
-			//	counter++;
-				//idealSpecular(newRay, t_min, rec, current_surface_record, light, counter, hit);
+				counter++;
+				idealSpecular(newRay, t_min, rec, current_surface_record, light, counter, hit);
 
 			}
 
@@ -60,7 +60,7 @@ public:
 
 
 		}
-		*/
+		
 
 	
 	}
@@ -103,8 +103,8 @@ public:
 		// check if we hit and if the image has mirror reflection, if we do, see if the ray from the point of intersection to the mirror direction hits something,
 		// If it does check the mirror image
 
-		int counter = 1;
-		idealSpecular(ray, t_min, rec, current_surface_record, light, counter, hit);
+		//int counter = 1;
+		//idealSpecular(ray, t_min, rec, current_surface_record, light, counter, hit);
 
 		
 

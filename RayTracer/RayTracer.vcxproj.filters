@@ -989,9 +989,6 @@
     <ClInclude Include="LightSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WriteImage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1034,5 +1031,8 @@
     <None Include="dependencies\include\Eigen\SuperLUSupport" />
     <None Include="dependencies\include\Eigen\SVD" />
     <None Include="dependencies\include\Eigen\UmfPackSupport" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="video\finalVideo.mp4" />
   </ItemGroup>
 </Project>

@@ -465,7 +465,6 @@
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Triangle.h" />
-    <ClInclude Include="WriteImage.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\lib\glew32s.lib" />
@@ -505,6 +504,9 @@
     <None Include="dependencies\include\Eigen\SVD" />
     <None Include="dependencies\include\Eigen\UmfPackSupport" />
     <None Include="dependencies\lib\glfw3.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="video\finalVideo.mp4" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
