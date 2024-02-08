@@ -464,6 +464,8 @@
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="WriteImage.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\lib\glew32s.lib" />

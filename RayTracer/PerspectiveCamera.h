@@ -64,6 +64,38 @@ public:
 		}
 	}
 
+	void setViewpoint(Vector3d& e_)
+	{
+		e = e_;
+
+	}
+
+	void setViewDirection(Vector3d& viewDirection_)
+	{
+		viewDirection = viewDirection_;
+
+
+		if (viewDirection.cross(v) == Vector3d(0, 0, 0)) // If v and -w are collinear
+		{
+			std::cout << "Vectors are collinear." << std::endl;
+		}
+		else // Compute camera frame
+
+		{
+
+			viewDirection = viewDirection / viewDirection.norm();
+
+			u = viewDirection.cross(v);
+
+			u = u / u.norm();
+
+			v = u.cross(viewDirection);
+
+			v = v / v.norm();
+		}
+
+	}
+
 	Vector3d getDirectionOfRay(int i, int j) const
 	{
 		// calculate coordinates of pixel at position (i,j)  measured with respect to the origin e and the basis {v,u}

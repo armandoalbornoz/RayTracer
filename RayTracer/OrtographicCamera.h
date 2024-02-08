@@ -76,7 +76,7 @@ public:
 
 	// Receive the position (i,j) of a pixel and returns the the coordinates of the pixel's position on the image plane measured with respect to the
 	// origin e and the basis {v,u}
-	Vector3d getOriginOfRay(int i, int j)
+	Vector3d getOriginOfRay(int i, int j) const
 	{
 		// calculate coordinates of pixel at position (i,j)  measured with respect to the origin e and the basis {v,u}
 

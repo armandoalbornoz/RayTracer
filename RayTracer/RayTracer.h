@@ -35,23 +35,33 @@ public:
 		std::cout << "Image Width: " << imageWidth << " image Height: " << imageHeight << " image size: " << image.size() << std::endl;
 	}
 
-	std::vector<unsigned char> render(Scene& scene, const OrthographicCamera& ortographicCamera, const PerspectiveCamera& perspectiveCamera, LightSource light)
+	std::vector<unsigned char> render(Scene& scene, const OrthographicCamera& ortographicCamera, const PerspectiveCamera& perspectiveCamera, LightSource light, bool perspective)
 	{
 
 		std::vector<unsigned char> image(3 * imageWidth * imageHeight);
 
-		for (int i = 0; i < imageHeight; i++)
+		for (int j = 0; j < imageWidth; j++)
 		{
-			for (int j = 0; j < imageWidth; j++)
+			for (int i = 0; i < imageHeight; i++)
 			{
+				Ray ray;
 
-				//Vector3d rayOrigin = ortographicCamera.getOriginOfRay(i, j);
-				Vector3d rayDirection = perspectiveCamera.getDirectionOfRay(i, j);
+				if (perspective)
+				{
+					Vector3d rayDirection = perspectiveCamera.getDirectionOfRay(i, j);
+					ray.setOrigin(perspectiveCamera.getOrigin());
+					ray.setDirection(rayDirection);
+
+				}
+				else
+				{
+					Vector3d rayOrigin = ortographicCamera.getOriginOfRay(i, j);
+					ray.setOrigin(rayOrigin);
+					ray.setDirection(ortographicCamera.getDirection());
+				}
 
 				//std::cout << "(" << rayOrigin.x() << "," << rayOrigin.y() << "," << rayOrigin.z() << ") ";
 
-				//Ray ray(rayOrigin, ortographicCamera.getDirection);
-				Ray ray(perspectiveCamera.getOrigin(), rayDirection);
 
 				// This record contains the hit info of the closest surface that was hit in the scene at pixel i,j,
 				Record rec;
@@ -66,16 +76,16 @@ public:
 					{
 						double diffuseFactor = 0;
 						double specularFactor = 0;
-						rec.ambientCoefficient.x() = rec.ambientCoefficient.x() * 0.9;
-						rec.ambientCoefficient.y() = rec.ambientCoefficient.y() * 0.9;
-						rec.ambientCoefficient.z() = rec.ambientCoefficient.z() * 0.9;
+						rec.ambientCoefficient.x() = rec.ambientCoefficient.x() * 0.95;
+						rec.ambientCoefficient.y() = rec.ambientCoefficient.y() * 0.95;
+						rec.ambientCoefficient.z() = rec.ambientCoefficient.z() * 0.95;
 					}
 			
 
 					double redPixelColorDiffuse =
 						rec.diffuseCoefficient.x() * light.intensity.x() * diffuseFactor +
 						rec.specularCoefficient.x() * light.intensity.x() * specularFactor +
-						rec.ambientCoefficient.x() * light.ambientLightIntensity.x();
+						rec.ambientCoefficient.x() * light.ambientLightIntensity.x() ;
 						
 					double greenColorDiffuse = 
 						rec.diffuseCoefficient.y() * light.intensity.y() * diffuseFactor +
@@ -94,9 +104,9 @@ public:
 					//scene.diffuseShade(ray, light);
 
 					int idx = (i * imageWidth + j) * 3;
-					image[idx] = (unsigned char)(255 * redPixelColorDiffuse);
-					image[idx + 1] = (unsigned char)(255 * greenColorDiffuse);
-					image[idx + 2] = (unsigned char)(255 * bluePixelColorDiffuse);
+					image[idx] = (unsigned char)(255 * redPixelColorDiffuse /2);
+					image[idx + 1] = (unsigned char)(255 * greenColorDiffuse /2);
+					image[idx + 2] = (unsigned char)(255 * bluePixelColorDiffuse / 2);
 				}
 
 			}

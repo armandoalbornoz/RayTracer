@@ -26,8 +26,10 @@ public:
 		surfaces.push_back(surface);
 	}
 
+	
 	void idealSpecular(Ray& ray, double t_min, Record& rec, Record& current_surface_record, LightSource& light, int& counter, bool hit)
 	{
+		/*
 		if (counter > 1)
 		{
 			return;
@@ -58,6 +60,8 @@ public:
 
 
 		}
+		*/
+
 	
 	}
 

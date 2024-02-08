@@ -14,6 +14,7 @@ class Ray
 
 public:
 
+	Ray() {}
 
 	Ray(const Vector3d& o, const Vector3d& d)
 	{

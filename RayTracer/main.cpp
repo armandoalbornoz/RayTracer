@@ -9,9 +9,11 @@
 #include "./OrtographicCamera.h"
 #include <iostream>
 #include "./LightSource.h"
+#include <string>
+#include <fstream>
 
 
-
+using namespace std;
 using Eigen::Vector3d;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -20,6 +22,19 @@ void processInput(GLFWwindow* window);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
+
+std::vector<unsigned char> imageVecOrto;
+std::vector<unsigned char> imageVecProj;
+
+unsigned char* imageProj;
+unsigned char* imageOrto;
+
+unsigned char* dataProj;
+unsigned char* dataOrto;
+bool current = false;
+
+int width; 
+int height;
 
 
 const char* vertexShaderSource = "#version 330 core\n"
@@ -46,6 +61,53 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "}\n\0";
 
 
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int  action, int mods)
+{
+    
+    if (key == GLFW_KEY_P && action == GLFW_PRESS && imageVecProj.size() > 0 && imageVecOrto.size() > 0)
+    {
+        current = !current;
+
+        if (current && dataProj)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, dataProj);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else if (!current && dataOrto)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, dataOrto);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+    }
+}
+
+
+bool writeImage(string filename, int width, int height, std::vector<unsigned char> imageToWrite) {
+    ofstream image;
+    image.open(filename, ios::out | ios::binary);
+    if (!image) {
+        cerr << "Cannot open file" << endl;
+        return false;
+    }
+
+    image << "P3" << "\n";
+    image << width << " " << height << "\n";
+    image << "255" << "\n";
+
+    //size_t size = height * width;
+
+    for (int i = 0; i < 3 * width * height ; i+= 3)
+    {
+        image << (int)imageToWrite[i]  << " " << (int)imageToWrite[(i + 1)] << " " << (int)imageToWrite[(i + 2)] << endl;
+    }
+
+    image.close();
+  
+
+}
+
+
 int main()
 {
 
@@ -64,27 +126,61 @@ int main()
     std::cout << v1.cross(v2) << std::endl;
     */
 
-    const int width = 256; // keep it in powers of 2!
-    const int height = 256; // keep it in powers of 2!
+    width = 128; // keep it in powers of 2!
+    height = 128; // keep it in powers of 2!
+
 
     // Scene
     
-    Scene scene(std::make_shared<Sphere>(Vector3d(-20, 0, 50), 20, Vector3d(0.3,0.2, 0.4), Vector3d(1,1,1), Vector3d(0.35,0.35,0.3), Vector3d(0,0,0)));
-    scene.add(std::make_shared<Sphere>(Vector3d(35, 0, 70), 20, Vector3d(0.3, 0.8,0.6), Vector3d(0,0,0), Vector3d(0.7, 0.7, 0.7), Vector3d(0, 0, 0)));
+    Scene scene(std::make_shared<Sphere>(Vector3d(-20, 0, 0), 20, Vector3d(0.3,0.2, 0.4), Vector3d(1,1,1), Vector3d(0.3, 0.2, 0.4), Vector3d(0,0,0)));
+    scene.add(std::make_shared<Sphere>(Vector3d(35, 0, 20), 20, Vector3d(0.3, 0.8,0.6), Vector3d(0,0,0), Vector3d(0.3, 0.8, 0.6), Vector3d(0, 0, 0)));
    // Material sphere1Material(0.5);
-    scene.add(std::make_shared<Plane>(Vector3d(0, -20, 0), Vector3d(0, 1, 0), Vector3d(0.35 ,0.1 ,0.17), Vector3d(1, 1, 1), Vector3d(0.4 * 3, 0.7 *3, 0.9 * 3), Vector3d(0.4, 0.4, 0.4)));
+    scene.add(std::make_shared<Plane>(Vector3d(0, -20, 0), Vector3d(0, 1, 0), Vector3d(0.35 ,0.1 ,0.17), Vector3d(1, 1, 1), Vector3d(0.4, 0.7 , 0.9 ), Vector3d(0.4, 0.4, 0.4)));
     //Material sphere1Material(0.2);
 
     // Cameras
-    OrthographicCamera ortographicCamera(Vector3d(0, 0, 0), Vector3d(0, 0, 1), Vector3d(1, 0, 0), width, height);
-    PerspectiveCamera perspectiveCamera(Vector3d(0, 30, 0), Vector3d(0, 0, 1), Vector3d(1, 0, 0), width, height, 100);   
-    LightSource light(Vector3d(0.9,0.9,0.9), Vector3d(-150, 300, 50), Vector3d(0.2,0.2,0.2));
+    OrthographicCamera ortographicCamera(Vector3d(100, 0, 0), Vector3d(-100, 0, 1), Vector3d(200, 0, 0), width, height);
+    PerspectiveCamera perspectiveCamera(Vector3d(100, 0, 0), Vector3d(-100, 0, 1), Vector3d(200, 0, 0), width, height, 100);
+    LightSource light(Vector3d(1,1,1), Vector3d(-150, 300, 50), Vector3d(1.2,1.2,1.2));
 
     // RayTracer
 
     Raytracer r(width, height);
+   
+    // std::vector<unsigned char> imageVec = r.render(scene, ortographicCamera, perspectiveCamera, light, true);
 
-    std::vector<unsigned char> imageVec= r.render(scene, ortographicCamera, perspectiveCamera, light);
+      imageVecProj = r.render(scene, ortographicCamera, perspectiveCamera, light, true);
+      imageVecOrto = r.render(scene, ortographicCamera, perspectiveCamera, light, false);
+
+    
+    //std::vector<unsigned char> imageVec;;
+     //writeImage("C:/Users/PC/Desktop/images/0.ppm", width, height, imageVec);
+
+    // Code to generate video
+    /*
+    for (int frame = 0; frame < 360; frame++)
+    {
+        double t = frame / 100.0;
+        Vector3d e = Vector3d(100 * std::cos(t), 0, 100 * std::sin(t));
+        Vector3d viewVector = -e + Vector3d(0,0,1);
+        perspectiveCamera.setViewpoint(e);
+        perspectiveCamera.setViewDirection(viewVector);
+
+        // render and save image
+        imageVec = r.render(scene, ortographicCamera, perspectiveCamera, light);
+        writeImage("C:/Users/PC/Desktop/images/" + std::to_string(frame) + ".ppm", width, height, imageVec);
+        
+        // change camera position by finding the new center of the camera and the view vector
+ 
+
+
+      //  perspectiveCamera.s
+
+    }
+
+    */
+    
+    
 
     // glfw: initialize and configure
     // ------------------------------
@@ -106,6 +202,9 @@ int main()
         glfwTerminate();
         return -1;
     }
+
+    glfwSetKeyCallback(window, keyCallback);
+
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -204,8 +303,11 @@ int main()
 
     // Create the image (RGB Array) to be displayed
 
-    
-    unsigned char* image = &imageVec[0];
+     imageProj = &imageVecProj[0];
+     imageOrto = &imageVecOrto[0];
+
+
+    //unsigned char* image = &imageVec[0];
     //unsigned char image[width * height * 3];
 
     /*
@@ -221,11 +323,17 @@ int main()
     }
     */
 
+    
+    //unsigned char* data = &image[0];
+     dataProj = &imageProj[0];
+     dataOrto = &imageOrto[0];
 
-    unsigned char* data = &image[0];
-    if (data)
+
+
+
+    if (dataProj)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, dataProj);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
@@ -289,8 +397,4 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
-
-
-   
-
 }
