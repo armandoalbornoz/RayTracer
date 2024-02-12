@@ -1,18 +1,20 @@
 Instructions to run the program:
 
 First way:
-The first and easiest way to run this program is to have visual studio. After having donwloaded the zip file and extracted the content
-you will have a RayTracer-master folder. Enter into this folder, double click on RayTracer.sln. This will open  visual studio. Change x64
+The first and easiest way to run this program is to have visual studio and use windows. After having donwloaded the zip file and extracted the content
+you will have a RayTracer-master folder. Enter into this folder, double click on RayTracer.sln. This will open visual studio. Change x64
 to x86. Run the program using the green button.
 
 Second way MSBUILD:
 First, if you do not have MSBUILD, you need to install it. You can find it here https://dotnet.microsoft.com/en-us/download/dotnet/8.0. 
 After you install it, add the directory of the msbuild.exe install on your machine to the PATH environment 
 variable. Now, After having donwloaded the zip file and extracted the content
-you will have a RayTracer-master folder. Enter into this folder, then enter into the folder RayTracer. In this folder open open the terminal
+you will have a RayTracer-master folder.  Enter into this folder, then enter into the folder RayTracer. In this folder you will have a dependencies folder 
+which includes a  lib and include folder. Notice if you are utilizing linux or mac you also have to download the binaries of Eigen,GLFW, and GLEW, then go to the
+dependencies folder and put the libraries in the libraries folder and the includes in the includes folder. (You do not have to do this if you are using windows since 
+I provided the dependecies for windows.) After having done this go back to the RayTracer folder. In this folder open open the terminal
 (in my case gitbash) and run the command "msbuild.exe RayTracer.vcxproj -p:Platform=x86". The .exe file can be found in the Debug folder. 
-Notice if you are utilizing linux you also have to download the binaries of Eigen,GLFW, GLEW, then go to dependencies folder and put the libraries in the 
-libraries folder and the includes in the includes folder. (If you do not have to do this since I provided the dependecies for windows.)
+
 
 To Test the program you can go to the main function and modify the scene. The scene consists fo the following code:
 
