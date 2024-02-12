@@ -11,6 +11,8 @@ After you install it, add the directory of the msbuild.exe install on your machi
 variable. Now, After having donwloaded the zip file and extracted the content
 you will have a RayTracer-master folder. Enter into this folder, then enter into the folder RayTracer. In this folder open open the terminal
 (in my case gitbash) and run the command "msbuild.exe RayTracer.vcxproj -p:Platform=x86". The .exe file can be found in the Debug folder. 
+Notice if you are utilizing linux you also have to download the binaries of Eigen,GLFW, GLEW, then go to dependencies folder and put the libraries in the 
+libraries folder and the includes in the includes folder. (If you do not have to do this since I provided the dependecies for windows.)
 
 To Test the program you can go to the main function and modify the scene. The scene consists fo the following code:
 
